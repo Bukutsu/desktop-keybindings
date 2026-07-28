@@ -1,9 +1,7 @@
 #!/bin/sh
 set -eu
 
-# Faithful COSMIC shortcut port using native XFCE/xfwm4 actions where possible.
-# Unmapped COSMIC features (overview, directional focus, stacking, swap, zoom)
-# are intentionally left alone rather than approximated with surprising commands.
+# Faithful COSMIC desktop shortcut port using native XFCE/xfwm4 actions.
 
 channel=xfce4-keyboard-shortcuts
 backup="${XDG_STATE_HOME:-$HOME/.local/state}/cosmic-keybindings-xfce/$(date +%Y%m%d-%H%M%S)"
@@ -21,23 +19,31 @@ remove_key() {
 wm() { set_key "/xfwm4/custom/$1" "$2"; }
 cmd() { set_key "/commands/custom/$1" "$2"; }
 
-# Remove existing command bindings that collide with COSMIC's Super shortcuts.
+# Remove conflicting command bindings.
 for key in \
-  '<Super>' '<Super>a' '<Super>b' '<Super>e' '<Super>f' '<Super>m' \
-  '<Super>p' '<Super>q' '<Super>r' '<Super>t' '<Super>w' '<Super>Escape' \
-  '<Super>Tab' '<Super><Shift>Tab' '<Super>F11' '<Super>Print'; do
+  '<Super>' '<Super>a' '<Super>b' '<Super>c' '<Super>d' '<Super>e' '<Super>f' '<Super>h' \
+  '<Super>m' '<Super>p' '<Super>q' '<Super>r' '<Super>s' '<Super>t' '<Super>v' '<Super>w' \
+  '<Super>Escape' '<Super><Alt>Escape' '<Super><Shift>e' '<Super><Shift>s' '<Super>Tab' \
+  '<Super><Shift>Tab' '<Super>F11' '<Super>Print' '<Super><Shift>d'; do
   remove_key "/commands/custom/$key"
 done
 
-# Native xfwm4 window actions.
+# Native xfwm4 window actions (COSMIC style).
 wm '<Super>q' close_window_key
+wm '<Alt>F4' close_window_key
 wm '<Super>m' maximize_window_key
+wm '<Super>c' center_window_key
+wm '<Super>h' hide_window_key
+wm '<Super>d' show_desktop_key
+wm '<Super><Shift>d' show_desktop_key
 wm '<Super>F11' fullscreen_key
 wm '<Super>r' resize_window_key
 wm '<Super>Tab' switch_window_key
 wm '<Super><Shift>Tab' cycle_reverse_windows_key
+wm '<Alt>Tab' switch_window_key
+wm '<Alt><Shift>Tab' cycle_reverse_windows_key
 
-# COSMIC Move -> closest XFWM4 native tiling actions.
+# Tiling & Snapping (Arrow keys + Vim h/j/k/l).
 for pair in \
   '<Super><Shift>Left:tile_left_key' \
   '<Super><Shift>Right:tile_right_key' \
@@ -50,13 +56,14 @@ for pair in \
   key=${pair%%:*}; action=${pair#*:}; wm "$key" "$action"
 done
 
-# Nine numbered workspaces, plus adjacent workspace navigation.
+# Workspaces (1..9).
 xfconf-query -c xfwm4 -p /general/workspace_count --create -t int -s 9
 for i in 1 2 3 4 5 6 7 8 9; do
   wm "<Super>$i" "workspace_${i}_key"
   wm "<Super><Shift>$i" "move_window_workspace_${i}_key"
 done
 
+# Directional Workspace Navigation.
 for pair in \
   '<Super><Primary>Left:left_workspace_key' \
   '<Super><Primary>Right:right_workspace_key' \
@@ -77,7 +84,7 @@ for pair in \
   key=${pair%%:*}; action=${pair#*:}; wm "$key" "$action"
 done
 
-# COSMIC output movement -> closest XFWM4 move-to-monitor actions.
+# Monitor switching.
 for pair in \
   '<Super><Shift><Alt>Left:move_window_to_monitor_left_key' \
   '<Super><Shift><Alt>Right:move_window_to_monitor_right_key' \
@@ -86,19 +93,27 @@ for pair in \
   key=${pair%%:*}; action=${pair#*:}; wm "$key" "$action"
 done
 
-# COSMIC application/system shortcuts.
-cmd '<Super>' 'xfce4-appfinder -c'
-cmd '<Super>slash' 'xfce4-appfinder -c'
-cmd '<Super>a' "sh -c 'pkill -x xfce4-appfinder || xfce4-appfinder'"
+# App Launchers & System Controls.
+app_finder="sh -c 'pkill -x xfce4-appfinder || xfce4-appfinder'"
+cmd '<Super>' "$app_finder"
+cmd '<Super>slash' "$app_finder"
+cmd '<Super>a' "$app_finder"
 cmd '<Super>b' 'exo-open --launch WebBrowser'
 cmd '<Super>f' 'exo-open --launch FileManager'
 cmd '<Super>t' 'exo-open --launch TerminalEmulator'
+cmd '<Super>s' 'xfce4-settings-manager'
+cmd '<Super><Shift>e' 'xfce4-session-logout'
 cmd '<Super>Escape' 'xflock4'
 cmd '<Super><Alt>Escape' 'xkill'
 
-# Prevent XFCE's generic custom-command override from masking the mappings.
+# Screenshots.
+cmd 'Print' 'xfce4-screenshooter'
+cmd '<Super>Print' 'xfce4-screenshooter -r'
+cmd '<Super><Shift>s' 'xfce4-screenshooter -r'
+cmd '<Shift>Print' 'xfce4-screenshooter -r'
+
+# Enable overrides.
 set_key /commands/custom/override true
 set_key /xfwm4/custom/override true
 
 printf 'Applied COSMIC-compatible XFCE shortcuts. Backup: %s\n' "$backup"
-printf '%s\n' 'Unmapped: directional focus, overview, stacking, swap, floating, orientation, zoom, last workspace.'

@@ -12,6 +12,10 @@ set_key() {
   xfconf-query -c "$channel" -p "$1" --create -t string -s "$2"
 }
 
+set_bool_key() {
+  xfconf-query -c "$channel" -p "$1" --create -t bool -s "$2"
+}
+
 remove_key() {
   xfconf-query -c "$channel" -p "$1" -r 2>/dev/null || true
 }
@@ -111,8 +115,8 @@ cmd '<Super>Print' 'xfce4-screenshooter -r'
 cmd '<Super><Shift>s' 'xfce4-screenshooter -r'
 cmd '<Shift>Print' 'xfce4-screenshooter -r'
 
-# Enable overrides.
-set_key /commands/custom/override true
-set_key /xfwm4/custom/override true
+# Enable overrides (must be boolean type for XFCE 4.20).
+set_bool_key /commands/custom/override true
+set_bool_key /xfwm4/custom/override true
 
 printf 'Applied COSMIC-compatible XFCE shortcuts. Backup: %s\n' "$backup"

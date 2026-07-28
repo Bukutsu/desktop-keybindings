@@ -95,7 +95,6 @@ done
 
 # App Launchers & System Controls.
 app_finder="xfce4-appfinder"
-cmd '<Super>' "$app_finder"
 cmd '<Super>slash' "$app_finder"
 cmd '<Super>a' "$app_finder"
 cmd '<Super>b' 'exo-open --launch WebBrowser'

@@ -1,6 +1,12 @@
-# Cosmic Keybindings for KDE Plasma 6 & GNOME
+# Desktop Keybindings
 
-Faithful port of [COSMIC desktop](https://system76.com/cosmic) keyboard shortcuts to KDE Plasma 6 and GNOME.
+Faithful ports of [COSMIC desktop](https://system76.com/cosmic) keyboard shortcuts to multiple Linux desktop environments.
+
+Current ports:
+
+- KDE Plasma 6
+- GNOME
+- XFCE
 
 ## Installation
 

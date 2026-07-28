@@ -98,7 +98,7 @@ for pair in \
 done
 
 # App Launchers & System Controls.
-app_finder="xfce4-appfinder"
+app_finder="xfce4-appfinder --toggle-window"
 cmd '<Super>slash' "$app_finder"
 cmd '<Super>a' "$app_finder"
 cmd '<Super>b' 'exo-open --launch WebBrowser'

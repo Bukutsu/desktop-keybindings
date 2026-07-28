@@ -89,7 +89,7 @@ done
 # COSMIC application/system shortcuts.
 cmd '<Super>' 'xfce4-appfinder -c'
 cmd '<Super>slash' 'xfce4-appfinder -c'
-cmd '<Super>a' 'xfce4-appfinder'
+cmd '<Super>a' "sh -c 'pkill -x xfce4-appfinder || xfce4-appfinder'"
 cmd '<Super>b' 'exo-open --launch WebBrowser'
 cmd '<Super>f' 'exo-open --launch FileManager'
 cmd '<Super>t' 'exo-open --launch TerminalEmulator'

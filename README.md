@@ -1,8 +1,10 @@
-# Cosmic Keybindings for KDE Plasma 6
+# Cosmic Keybindings for KDE Plasma 6 & GNOME
 
-Faithful port of [COSMIC desktop](https://system76.com/cosmic) keyboard shortcuts to KDE Plasma 6.
+Faithful port of [COSMIC desktop](https://system76.com/cosmic) keyboard shortcuts to KDE Plasma 6 and GNOME.
 
 ## Installation
+
+### KDE Plasma 6
 
 > [!IMPORTANT]
 > Ensure you have virtual desktops configured in **System Settings → Window Management → Virtual Desktops** (e.g., 9 desktops) before importing.
@@ -11,6 +13,30 @@ Faithful port of [COSMIC desktop](https://system76.com/cosmic) keyboard shortcut
 2. Open **System Settings → Keyboard → Shortcuts**
 3. Click **Manage Schemes → Import Scheme...**
 4. Select the file and apply
+
+### XFCE
+
+Apply the COSMIC shortcuts to XFCE using native `xfwm4` actions where possible:
+
+```bash
+./scripts/apply_xfce_cosmic.sh
+```
+
+This configures nine workspaces, numbered workspace movement, native tiling, window operations, adjacent workspace navigation, monitor movement, launcher, terminal, browser, file manager, lock, and screenshot-compatible system shortcuts. XFCE has no native equivalents for COSMIC's directional focus, overview, stacking, swap, floating, orientation, zoom, or last-workspace actions; those are left unmapped rather than replaced with misleading commands. A timestamped keybinding backup is created under `~/.local/state/cosmic-keybindings-xfce/`.
+
+## GNOME
+
+Apply COSMIC keybindings directly via `gsettings`:
+
+```bash
+./scripts/apply_gnome_cosmic.sh
+```
+
+To backup current GNOME keybindings and restore default GNOME shortcuts:
+
+```bash
+./scripts/reset_gnome_defaults.sh
+```
 
 > [!NOTE]
 > Do not copy `scheme/cosmic.kksrc` directly to `~/.config/kglobalshortcutsrc`; KDE import schemes and the live shortcut config use different formats.
